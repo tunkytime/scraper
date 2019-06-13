@@ -1,6 +1,6 @@
+{{#each article}}
 <div class="row">
-    <div class="col-6">
-        {{#each article}}
+    <div class="col-sm-8">
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title" data-id="{{this._id}}">{{this.headline}}</h5>
@@ -8,6 +8,9 @@
                 <a href="{{this.link}}" target="_blank" class="btn btn-primary">Read Full Article</a>
             </div>
         </div>
-        {{/each}}
+    </div>
+    <div class="col-sm-4">
+        <div class="comments" id="{{this.id}}"></div>
     </div>
 </div>
+{{/each}}

@@ -42,10 +42,28 @@ module.exports = app => {
             .then(dbArticle => {
                 res.render("articles", {
                     article: dbArticle
-                })
+                });
             }).catch(err => {
                 res.json(err);
-            })
-    })
+            });
+    });
+
+    app.get("/articles/:id", (req, res) => {
+        db.Article.findOne({
+            _id: req.params.id
+        }).populate("comment").then(dbArticle => {
+            res.json(dbArticle)
+        }).catch(err => {
+            res.json(err);
+        });
+    });
+
+    app.post("/articles/:id", (req, res) => {
+        db.Comment.create(req.body).then(dbComment => {
+            res.json(dbComment);
+        }).catch(err => {
+            res.json(err);
+        });
+    });
 
 };
