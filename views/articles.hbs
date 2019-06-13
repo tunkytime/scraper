@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-6">
+        {{#each article}}
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title" data-id="{{this._id}}">{{this.headline}}</h5>
+                <p class="card-text">{{this.summary}}</p>
+                <a href="{{this.link}}" target="_blank" class="btn btn-primary">Read Full Article</a>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

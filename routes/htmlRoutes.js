@@ -1,12 +1,51 @@
-// var db = require("../models");
+const axios = require("axios");
+const cheerio = require("cheerio");
+const db = require("../models");
 
-module.exports = function (app) {
-    app.get("/", function (req, res) {
+module.exports = app => {
+    app.get("/", (req, res) => {
         res.render("index");
     });
 
-    // Render 404 page for any unmatched routes
-    app.get("*", function (req, res) {
-        res.render("404");
+    app.get("/scrape", (req, res) => {
+        axios.get("http://www.echojs.com/").then(response => {
+            const $ = cheerio.load(response.data);
+            $("article").each((i, element) => {
+                const result = {};
+
+                result.headline = $(this)
+                    .children("h2")
+                    .children("a")
+                    .text();
+                result.summary = $(this)
+                    .children("p")
+                    .text();
+                result.link = $(this)
+                    .children("h2")
+                    .children("a")
+                    .attr("href");
+                db.Article.create(result)
+                    .then(dbArticle => {
+                        console.log(dbArticle);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            });
+            res.send("Scrape Complete");
+        });
     });
+
+    app.get("/articles", (req, res) => {
+        db.Article.find({})
+            // .populate("comments")
+            .then(dbArticle => {
+                res.render("articles", {
+                    article: dbArticle
+                })
+            }).catch(err => {
+                res.json(err);
+            })
+    })
+
 };
