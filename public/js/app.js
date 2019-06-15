@@ -1,48 +1,42 @@
-$(document).on("click", ".card-title", function () {
-    $(".comments").empty();
-    let thisId = $(this).data("id");
-    const $comments = $(`#${thisId}`);
-    $.ajax({
-        method: "GET",
-        url: `/articles/${thisId}`
-    }).then(data => {
-        console.log(data);
-        newCommentCard($comments, data, thisId);
-        if (data.comment) {
-            $("#titleInput").val(data.comment.title);
-            $("#bodyInput").val(data.comment.body);
-        }
-    })
+$(document).on("click", "#showCommentInput", function() {
+  let thisId = $(this).attr("data-id");
+  let e = $(this);
+
+  $.ajax({
+    method: "GET",
+    url: `/articles/${thisId}`
+  }).then(function(data) {
+    data = data[0];
+    console.log(data);
+    e
+      .parent()
+      .parent()
+      .parent()
+      .parent()
+      .find("span").html(`
+      <div class="mt-3"><input id="titleInput" name="title" placeholder="Title"></div>
+      <div class="mt-1"><textarea rows="3" cols="50" id="bodyInput" name="body" placeholder="Add comment"></textarea></div>
+      <a class="mt-3 text-white btn btn-danger" data-id="${
+        data._id
+      }" id="saveComment">Add Comment</a>`);
+  });
 });
 
-$(document).on("click", "#saveComment", function () {
-    let thisId = $(this).data("id");
-    $.ajax({
-        method: "POST",
-        url: `/articles/${thisId}`,
-        data: {
-            title: $("#titleInput").val().trim(),
-            body: $("#bodyInput").val().trim()
-        }
-    }).then(data => {
-        console.log(data);
-    })
-    $("#titleinput").val("");
-    $("#bodyinput").val("");
+$(document).on("click", "#saveComment", function() {
+  let thisId = $(this).attr("data-id");
+  $.ajax({
+    method: "POST",
+    url: `/articles/${thisId}`,
+    data: {
+      title: $("#titleInput").val(),
+      body: $("#bodyInput").val()
+    }
+  }).then(function(data) {
+    console.log(data);
+  });
+
+  $("#bodyInput").val("");
+  $("#titleInput").val("");
+
+  location.reload();
 });
-
-
-const newCommentCard = (e, data, id) => {
-    let card = $(`<div class="card mt-3"></div>`);
-    let body = $(`<div class="card-body"></div>`)
-    let title = $(`<span id="titleInput" class="card-title" data-id="${id}">${data.headline}</span>`)
-    let text = $(`<p class="card-text"></p>`).html(`
-        <div class="form-group">
-        <label for="comment">Enter comment</label>
-        <textarea class="form-control" id="bodyInput"></textarea>
-        </div`)
-    let btn = $(`<button class="btn btn-secondary btn-sm" data-id="${id}" id="saveComment">Save Comment</button>`)
-    body.append(title, text, btn);
-    card.append(body);
-    e.append(card);
-};
