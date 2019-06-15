@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const exphbs = require("express-handlebars");
 const mongoose = require("mongoose");
@@ -25,6 +27,8 @@ app.set("view engine", ".hbs");
 // Connect to the Mongo DB
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost/mongoScraper";
+
+console.log(process.env.MONGODB_URI);
 
 // Connect to the Mongo DB
 mongoose.connect(MONGODB_URI, {
