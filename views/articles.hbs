@@ -10,8 +10,12 @@
                         <div class="card-title">Comments:</div>
                         <div class="card-text">
                             {{#each this.comment}}
-                            <p>{{this.title}}</p>
-                            <p><em>{{this.body}}</em></p>
+                            <div>
+                                <p>{{this.title}}</p>
+                                <p><em>{{this.body}}<a href="#" onclick="return false;" id="deleteComment"
+                                            data-id="{{this._id}}" class="btn">Delete</a>
+                                </p></em>
+                            </div>
                             <hr>
                             {{/each}}
                             <a href="#" onclick="return false;" id="showCommentInput" data-id="{{this._id}}">Click to
@@ -19,7 +23,8 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{this.link}}" target="_blank" class="mt-3 btn btn-primary">Read Full Article</a>
+                <a href="https://www.nytimes.com{{this.link}}" target="_blank" class="mt-3 btn btn-primary">Read Full
+                    Article</a>
                 <span></span>
             </div>
         </div>

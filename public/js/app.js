@@ -33,10 +33,20 @@ $(document).on("click", "#saveComment", function() {
     }
   }).then(function(data) {
     console.log(data);
+    location.reload();
   });
 
   $("#bodyInput").val("");
   $("#titleInput").val("");
+});
 
+$(document).on("click", "#deleteComment", function() {
+  let thisId = $(this).attr("data-id");
+  $.ajax({
+    method: "DELETE",
+    url: `/articles/${thisId}`
+  }).then(function(data) {
+    console.log(data);
+  });
   location.reload();
 });

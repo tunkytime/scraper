@@ -34,7 +34,7 @@ module.exports = app => {
             console.log(err);
           });
       });
-      res.send("Scrape Complete");
+      res.send("Scrape complete.");
     });
   });
 
@@ -66,7 +66,6 @@ module.exports = app => {
   });
 
   app.post("/articles/:id", function(req, res) {
-    console.log(req.body);
     db.Comment.create(req.body)
       .then(function(dbComment) {
         return db.Article.findOneAndUpdate(
@@ -77,6 +76,16 @@ module.exports = app => {
       })
       .then(function(dbArticle) {
         res.json(dbArticle);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
+
+  app.delete("/articles/:id", function(req, res) {
+    db.Comment.remove({ _id: req.params.id })
+      .then(function(dbComment) {
+        res.end("Deleted");
       })
       .catch(err => {
         res.json(err);
