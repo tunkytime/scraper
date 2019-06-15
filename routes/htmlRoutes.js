@@ -34,7 +34,10 @@ module.exports = app => {
             console.log(err);
           });
       });
-      res.send("Scrape complete.");
+      res.send(
+        `<h1>Scrape complete.</h1>
+        <a href="/articles">View results here</a>`
+      );
     });
   });
 
